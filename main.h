@@ -19,12 +19,12 @@
 #define ibi(reg,bit) reg ^= (1<<bit)
 #define CheckBit(reg,bit) (reg&(1<<bit))
 #define nop() {asm("nop");}		// функция асемблера для задержки
-void delay(int t){			// функция задержки
+void delay(unsigned int t){			// функция задержки
 	int x;
 	for (x=t;x>0;x--) nop(); 
 }
 // Функция задержки в мкс
-void _delay_us(unsigned char time_us)
+void delay_us(unsigned char time_us)
 {
 	register unsigned char i;
 	for(i = 0; i < time_us; i++){
@@ -33,13 +33,13 @@ void _delay_us(unsigned char time_us)
 	}
 }
  // Функция задержки в мс
-void _delay_ms(unsigned int time_ms)
+void delay_ms(unsigned int time_ms)
 {
 	register unsigned int i;
 	for(i = 0; i < time_ms; i++){
-		_delay_us(250);
-		_delay_us(250);
-		_delay_us(250);
-		_delay_us(250);
+		delay_us(250);
+		delay_us(250);
+		delay_us(250);
+		delay_us(250);
 	}
 }
