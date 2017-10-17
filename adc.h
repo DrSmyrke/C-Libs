@@ -8,11 +8,13 @@ ISR(ADC_vect){
 // 	unsigned char adc_data;
 // 	adc_data = ADC>>2;
 // 	vcc = 1.1 * 255 / adc_data;
+//Результат преобразования хранится в ADCW = ADCH:ADCL
 }
 void adc_init(){
 	pinModePC(0,INPUT); 
 	pinModePC(1,INPUT); 
 	ADMUX = 0b01000000;
 	ADCSRA = (1<<ADEN)|(1<<ADIE)|(1<<ADSC)|5;
+	//ADCSRA |=(1<<ADSC); //Запускаем следующее преобразование
 	sei ();
 }

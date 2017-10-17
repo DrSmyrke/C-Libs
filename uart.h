@@ -12,6 +12,7 @@ void uart_init(){
 	UCSRC=0x86;
 	UBRRH=0x00;
     UBRRL=0x33;
+
 	UCSRB=( 1 << TXEN ) | ( 1 << RXEN ) | (1 << RXCIE );
 	UCSRC |= (1 << URSEL)| // Для доступа к регистру UCSRC выставляем бит URSEL
 	(1 << UCSZ1)|(1 << UCSZ0); // Размер посылки в кадре 8 бит
@@ -21,6 +22,12 @@ ISR(USART_RXC_vect){
 	//UART_Transmit(0x00);
 	//delay(100);
 	//UART_Transmit(tc);
+}
+ISR(USART_TXC_vect ){	// Отправка данных
+	//lcd_goto_xy(1,2);
+	//itoa(ch,str,10);
+	//lcd_str("PERED");
+	//lcd_str(str);
 }
 // Функция передачи данных по USART
 void uart_send(char data){
@@ -33,4 +40,9 @@ void str_uart_send(char *string){
 		uart_send(*string);
 		string++;
 	}
+}
+// Функция привема данных по USART
+unsigned char uart_receive(void) {
+    while(!(UCSRA & (1<<RXC)) );
+    return UDR;
 }

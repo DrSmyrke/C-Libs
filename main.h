@@ -1,3 +1,4 @@
+#include <avr/io.h>
 //#define TASCII(numb) (numb+48)
 //#define DIG(numb) (numb/10)
 //#define DEC(numb) (numb%10)
