@@ -23,7 +23,14 @@
 
 // CheckBit(PINB,1);
 // setPlus(PORTB,0);
-
+void delay2(void)
+{
+	uint8_t i;
+	uint16_t i2;
+	for(i = 0; i < 16; i++){
+		for(i2 = 0; i2 < 65000; i2++) asm("nop");
+	}
+}
 // void delay(unsigned int t){
 // 	int x;
 // 	for (x=t;x>0;x--) nop(); 

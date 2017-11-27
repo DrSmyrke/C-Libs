@@ -23,9 +23,21 @@ ACIS1	ACIS0	Event
 
 */
 ISR( ANA_COMP_vect ){
-	digitalWrite(PORTD,3,ACO);
+	digitalWrite(POWER_LED_PORT,POWER_LED_PIN_NUM,!CheckBit(ACSR,ACO));
+	/*срабатывание по положительному 
+    фронту входного сигнала */ 
+	//if (!(ACSR &(1<<ACIS0))){
+		
+	//}else{
+		/*срабатывание по отрицательному 
+         фронту входного сигнала */
+	//}
+	//на всякий случай сброс флага прерывания     
+	ACSR |=(1<<ACI);
 }
 void comparator_init()
 {
-	ACSR = ( 1 << ACD ) | ( 1 << ACBG ) | ( 1 << ACIE );
+	//pinModePD(6,INPUT);
+	pinModePD(7,INPUT);
+	ACSR |= ( 0 << ACD ) | ( 1 << ACBG ) | ( 1 << ACIE );
 }

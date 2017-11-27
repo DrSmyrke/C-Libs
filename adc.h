@@ -12,9 +12,8 @@ ISR(ADC_vect){
 }
 void adc_init(){
 	pinModePC(0,INPUT); 
-	pinModePC(1,INPUT); 
-	ADMUX = 0b01000000;
-	ADCSRA = (1<<ADEN)|(1<<ADIE)|(1<<ADSC)|5;
-	//ADCSRA |=(1<<ADSC); //Запускаем следующее преобразование
-	sei ();
+	ADMUX = 0b00000000;
+	ADMUX |= (1<<REFS0);
+	//ADMUX |= (1<<REFS1);
+	ADCSRA = (1<<ADEN)|(1<<ADIE)|5;
 }
