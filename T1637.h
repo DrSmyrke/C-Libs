@@ -1,26 +1,21 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define TM1637_PORT 		PORTD
-#define TM1637_DDR 			DDRD
-#define TM1637_CLK_PIN 		5
-#define TM1637_DIO_PIN 		6
+#define TM1637_CLK_PIN 		0
+#define TM1637_CLK_PORT 	PORTB
+#define TM1637_CLK_DDR		DDRB
 
-#define TM1637_h
-//кусок других определений украденый из ардуиновской библиотеки
+#define TM1637_DIO_PIN 		5
+#define TM1637_DIO_PORT 	PORTD
+#define TM1637_DIO_DDR		DDRD
 
 	//************definitions for TM1637*********************
 #define ADDR_AUTO  0x40
 #define ADDR_FIXED 0x44
-	
 #define STARTADDR  0xc0 
 	/**** definitions for the clock point of the 4-Digit Display *******/
 #define POINT_ON   1
 #define POINT_OFF  0
-	/**************definitions for brightness***********************/
-#define  BRIGHT_DARKEST 0
-#define  BRIGHT_TYPICAL 2
-#define  BRIGHTEST      7
 //--------------------------------------------------------//
 //Special characters index of tube table
 #define INDEX_NEGATIVE_SIGN	16
@@ -29,14 +24,11 @@
 #define D4036B 0
 #define D4056A 1
 		
-		uint8_t Cmd_SetData;
-		uint8_t Cmd_SetAddr;
 		uint8_t Cmd_DispCtrl;
 		uint8_t _PointFlag; 	//_PointFlag=1:the clock point on
 		uint8_t _DispType;
 		int8_t coding(int8_t DispData);
 		uint8_t DecPoint;
-		uint8_t BlankingFlag;
 
 static uint8_t TubeTab[] = {0x3f,0x06,0x5b,0x4f,// знакогенератор
                            0x66,0x6d,0x7d,0x07,
@@ -51,98 +43,85 @@ void TM1637_writeByte(int8_t wr_data)// служебная функция зап
   uint8_t i;
     for(i=0;i<8;i++)        
   {
-   TM1637_PORT &= ~(1<<TM1637_CLK_PIN);
+   TM1637_CLK_PORT &= ~(1<<TM1637_CLK_PIN);
     if(wr_data & 0x01)
-	{ TM1637_PORT |= 1<<TM1637_DIO_PIN;}
-    else {TM1637_PORT &= ~(1<<TM1637_DIO_PIN);}
+	{ TM1637_DIO_PORT |= 1<<TM1637_DIO_PIN;}
+    else {TM1637_DIO_PORT &= ~(1<<TM1637_DIO_PIN);}
 	_delay_us(3);
     wr_data = wr_data>>1;      
-    TM1637_PORT |= 1<<TM1637_CLK_PIN;
+    TM1637_CLK_PORT |= 1<<TM1637_CLK_PIN;
 	_delay_us(3);  
   }  
  
-  TM1637_PORT &= ~(1<<TM1637_CLK_PIN);
+  TM1637_CLK_PORT &= ~(1<<TM1637_CLK_PIN);
   _delay_us(5);
-  TM1637_DDR &= ~(1<<TM1637_DIO_PIN);// если поменяете порт на какой-то другой кроме PORTC, то тут тоже все TM1637_DDR на другие DDRx менять надо будет
+  TM1637_DIO_DDR &= ~(1<<TM1637_DIO_PIN);
   while((PINC & (1<<TM1637_DIO_PIN))); 
-  TM1637_DDR |= (1<<TM1637_DIO_PIN);
-  TM1637_PORT |= 1<<TM1637_CLK_PIN;
+  TM1637_DIO_DDR |= (1<<TM1637_DIO_PIN);
+  TM1637_CLK_PORT |= 1<<TM1637_CLK_PIN;
   _delay_us(2);
-  TM1637_PORT &= ~(1<<TM1637_CLK_PIN);  
+  TM1637_CLK_PORT &= ~(1<<TM1637_CLK_PIN);  
 }
 
 void TM1637_start(void) // просто функция "старт" для протокола I2C
 {
-   TM1637_PORT |= 1<<TM1637_CLK_PIN; 
-   TM1637_PORT |= 1<<TM1637_DIO_PIN;
+   TM1637_CLK_PORT |= 1<<TM1637_CLK_PIN; 
+   TM1637_DIO_PORT |= 1<<TM1637_DIO_PIN;
  _delay_us(2);
-  TM1637_PORT &= ~(1<<TM1637_DIO_PIN); 
+  TM1637_DIO_PORT &= ~(1<<TM1637_DIO_PIN); 
 } 
 
 void TM1637_stop(void) // просто функция "стоп" для протокола I2C
 {
-  TM1637_PORT &= ~(1<<TM1637_CLK_PIN);
+  TM1637_CLK_PORT &= ~(1<<TM1637_CLK_PIN);
  _delay_us(2);
-  TM1637_PORT &= ~(1<<TM1637_DIO_PIN);
+  TM1637_DIO_PORT &= ~(1<<TM1637_DIO_PIN);
 _delay_us(2);
-  TM1637_PORT |= 1<<TM1637_CLK_PIN;;
+  TM1637_CLK_PORT |= 1<<TM1637_CLK_PIN;;
 _delay_us(2);
-  TM1637_PORT |= 1<<TM1637_DIO_PIN;
+  TM1637_DIO_PORT |= 1<<TM1637_DIO_PIN;
 }
 
-void TM1637_coding_all(uint8_t DispData[])//шифратор 
+void TM1637_coding_all(uint8_t DispData[])//шифратор всех знакомест
 {
-	uint8_t PointData;
-	if(_PointFlag == POINT_ON)PointData = 0x80;
-	else PointData = 0;
-	for(uint8_t i = 0;i < 4;i ++)
-	{
-		if(DispData[i] == 0x7f)DispData[i] = 0x00;
-		else DispData[i] = TubeTab[DispData[i]];// + PointData; // закоментированно, так как у моего дисплея нет десятичных точек
-	DispData[i] += 0x80;
+	uint8_t PointData = (_PointFlag == POINT_ON) ? 0x80 : 0;
+	uint8_t i;
+	for(i = 0;i < 4;i ++){
+		DispData[i] = (DispData[i] == 0x7f) ? 0x00 + PointData : TubeTab[DispData[i]] + PointData;
+		DispData[i] += 0x80;
 	}
-	if((_DispType == D4056A)&&(DecPoint != 3))
-	{
-	DispData[DecPoint] += 0x80;
-	DecPoint = 3;
+	if((_DispType == D4056A)&&(DecPoint != 3)){
+		DispData[DecPoint] += 0x80;
+		DecPoint = 3;
 	}
 }
-int8_t TM1637_coding(uint8_t DispData)// шифратор всех знакомест
+int8_t TM1637_coding(uint8_t DispData)// шифратор
 {
-	uint8_t PointData;
-	if(_PointFlag == POINT_ON)PointData = 0x80;
-	else PointData = 0;
-	if(DispData == 0x7f) DispData = 0x00 + PointData;
-	else DispData = TubeTab[DispData] + PointData;
+	uint8_t PointData = (_PointFlag == POINT_ON) ? 0x80 : 0;
+	DispData = (DispData == 0x7f) ? 0x00 : TubeTab[DispData] + PointData;
 	return DispData;
 }
-
-void TM1637_display_all(uint8_t DispData[]) // полезняшка! отображает содержимое массива прямо на экране. 
-											//не забываем, что можем отображать только числа от 0x00 до 0x0F или по-русски от 0 до 15
+// полезняшка! отображает содержимое массива прямо на экране.
+//не забываем, что можем отображать только числа от 0x00 до 0x0F или по-русски от 0 до 15
+void TM1637_display_all(uint8_t DispData[])
 {
   uint8_t SegData[4];
   uint8_t i;
-  for(i = 0;i < 4;i ++)
-  {
-    SegData[i] = DispData[i];
-  }
+  for(i = 0;i < 4;i ++){ SegData[i] = DispData[i]; }
   TM1637_coding_all(SegData);
   TM1637_start();
   TM1637_writeByte(ADDR_AUTO);
   TM1637_stop();
   TM1637_start();
-  TM1637_writeByte(Cmd_SetAddr);
-  for(i=0;i < 4;i ++)
-  {
-    TM1637_writeByte(SegData[i]);
-  }
+  TM1637_writeByte(STARTADDR);
+  for(i=0;i < 4;i ++){ TM1637_writeByte(SegData[i]); }
   TM1637_stop();
   TM1637_start();
   TM1637_writeByte(Cmd_DispCtrl);
   TM1637_stop();
 }
-
-void TM1637_display(uint8_t BitAddr,int8_t DispData)// отображает один символ (от 0 до 15)в определенном месте  (от 0 до 3)
+// отображает один символ (от 0 до 15)в определенном месте  (от 0 до 3)
+void TM1637_display(uint8_t BitAddr,int8_t DispData)
 {
   int8_t SegData;
   SegData = TM1637_coding(DispData);
@@ -150,56 +129,48 @@ void TM1637_display(uint8_t BitAddr,int8_t DispData)// отображает од
   TM1637_writeByte(ADDR_FIXED);
   TM1637_stop();
   TM1637_start();
-  TM1637_writeByte(BitAddr|0xc0);
+  TM1637_writeByte(BitAddr|STARTADDR);
   TM1637_writeByte(SegData);
   TM1637_stop();
   TM1637_start();
   TM1637_writeByte(Cmd_DispCtrl);
   TM1637_stop();
 }
-void TM1637_display_int_decimal(int16_t Decimal)// функция с минимальными изменениями скопированная с ардуиновской библиотеки. выводит целые числа от -999 до 9999
+// функция с минимальными изменениями скопированная с ардуиновской библиотеки. выводит целые числа от -999 до 9999
+void TM1637_display_int_decimal(int16_t Decimal, const uint8_t BlankingFlag)
 {
 	uint8_t temp[4];
-	if((Decimal > 9999)||(Decimal < -999))return;
-	if(Decimal < 0)
-	{
+	if((Decimal > 9999)||(Decimal < -999)) return;
+	if(Decimal < 0){
 		temp[0] = INDEX_NEGATIVE_SIGN;
 		Decimal = (Decimal & 0x7fff);
 		temp[1] = Decimal/100;
 		Decimal %= 100;
 		temp[2] = Decimal / 10;
 		temp[3] = Decimal % 10;
-		if(BlankingFlag)
-		{
-			if(temp[1] == 0)
-			{
+		if(BlankingFlag){
+			if(temp[1] == 0){
 				temp[1] = INDEX_BLANK;
 				if(temp[2] == 0) temp[2] = INDEX_BLANK;
 			}
 		}
-	}
-	else
-	{
+	}else{
 		temp[0] = Decimal/1000;
 		Decimal %= 1000;
 		temp[1] = Decimal/100;
 		Decimal %= 100;
 		temp[2] = Decimal / 10;
 		temp[3] = Decimal % 10;
-		if(BlankingFlag)
-		{
-			if(temp[0] == 0)
-			{
+		if(BlankingFlag){
+			if(temp[0] == 0){
 				temp[0] = INDEX_BLANK;
-				if(temp[1] == 0)
-				{
+				if(temp[1] == 0){
 					temp[1] = INDEX_BLANK;
 					if(temp[2] == 0) temp[2] = INDEX_BLANK;
 				}
 			}
 		}
 	}
-	BlankingFlag = 1;
 	TM1637_display_all(temp);
 } 
 
@@ -230,54 +201,34 @@ void TM1637_display_float_decimal(double Decimal) // функция с мини�
 	if((temp - Decimal)>0.5)temp--;
   }
   DecPoint = i;
-  BlankingFlag = 0;
-  TM1637_display_int_decimal(temp);
+  TM1637_display_int_decimal(temp,0);
 }
 
 void TM1637_clearDisplay(void) // чистит дисплей
 {
-  TM1637_display(0x00,0x7f);
-  TM1637_display(0x01,0x7f);
-  TM1637_display(0x02,0x7f);
-  TM1637_display(0x03,0x7f);  
+	TM1637_display(0x00,0x7f);
+	TM1637_display(0x01,0x7f);
+	TM1637_display(0x02,0x7f);
+	TM1637_display(0x03,0x7f);  
 }
 void TM1637_init(uint8_t DispType)// инициализирует переменные, назначает порт и пины для связи с дисплеем, а потом чистит дисплей
 {
-	TM1637_DDR |= (1<<TM1637_CLK_PIN) | (1<<TM1637_DIO_PIN);
+	TM1637_CLK_DDR |= (1<<TM1637_CLK_PIN);
+	TM1637_DIO_DDR |= (1<<TM1637_DIO_PIN);
+
 	_DispType = DispType;
-	BlankingFlag = 1;
 	DecPoint = 3;
 	TM1637_clearDisplay();
 }
-void TM1637_set(uint8_t brightness,uint8_t SetData,uint8_t SetAddr)// по большому счету только для установки яркости нужна
+void TM1637_setBrightness(uint8_t brightness)// для установки яркости нужна
 {
-  Cmd_SetData = SetData;
-  Cmd_SetAddr = SetAddr;
-  Cmd_DispCtrl = 0x88 + brightness;
+	if(brightness > 7 || brightness < 0) brightness = 0;
+	Cmd_DispCtrl = 0x88 + brightness;
 }
 void TM1637_point(uint8_t PointFlag)//не знаю зачем скопировал, пусть будет
 {
-  if(_DispType == D4036B) _PointFlag = PointFlag;
+	_PointFlag = PointFlag;
 }
-
-
-int main(void)// пример использования вышеописанных функций
-
-{
-	uint8_t SegData1[4]={0,1,2,3};//записываем в массив цифры 0,1,2,3
-	TM1637_init(1,5,4);//устанавливаем пины SCL и SDA
-	TM1637_set(2,0,0xC0);// ставим яркость 2
-	_delay_ms(2000);//не знаю зачем, но тупим немного
-    while(1) // а дальше в бесконечном цикле крутим в первом и четвертом разряде цифры от 0 до F
-    {
-		for (uint8_t j=0;j<=15;j++)
-		{
-			SegData1[3]=j;
-			SegData1[0]=j;
-			TM1637_display_all(SegData1);
-			_delay_ms(800);
-				
-		}
-	}
-}
-
+/*
+	TM1637_set(0-7);	установка яркости
+*/
