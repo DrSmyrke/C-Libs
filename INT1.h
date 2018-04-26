@@ -23,6 +23,7 @@ ISR( INT1_vect )
 //настройка внешнего прерывния INT1
 void int1_init(void)
 {
+	pinModePD(3,INPUT);
 	//настраиваем на Передний фронт на INT1
 	MCUCR |=(1<<ISC10);
 	MCUCR |=(1<<ISC11);

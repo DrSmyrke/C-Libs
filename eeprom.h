@@ -1,14 +1,14 @@
 #include <avr/eeprom.h>
 #include <avr/io.h>
 // Чтение из EEPROM
-static unsigned char eeprom_read(unsigned int address){
+uint8_t eeprom_read(uint32_t address){
 	while(EECR & (1 << EEWE)); // Ждем готовности
 	EEAR = address; // Загружаем требуемый адрес в регистр EEAR
 	EECR |= (1 << EERE); // Устанавливаем в «1» разряд EERE регистра EECR
 	return EEDR; // Возвращаем данные из регистра данных
 }
 // Запись в EEPROM
-static void eeprom_write(unsigned int address, unsigned char data){
+void eeprom_write(uint32_t address, uint8_t data){
 	// Проверяем данные
 	if (eeprom_read(address) != data){
 	while(EECR & (1 << EEWE)); // Ждем готовности
@@ -20,8 +20,8 @@ static void eeprom_write(unsigned int address, unsigned char data){
 	sei(); // Разрешаем прерывания
 	}
 }
-unsigned char read_eeprom_bits(unsigned int address, unsigned char bitnum){
-	unsigned char tmp,i;
+uint8_t read_eeprom_bits(uint32_t address, uint8_t bitnum){
+	uint8_t tmp,i;
 	tmp=0;for(i=0;i<bitnum;i++){if(eeprom_read(address+i)==0){tmp &= ~(1<<i);}else{tmp |= 1<<i;}}
 	return tmp;
 }

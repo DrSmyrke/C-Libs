@@ -21,6 +21,9 @@ ACIS1	ACIS0	Event
 1		0		Выход компаратора меняется с 1 на 0
 1		1		Выход компаратора меняется с 0 на 1
 
+AIN0 < AIN1		AC0 = 0
+AIN0 >= AIN1	AC0 = 1
+
 */
 ISR( ANA_COMP_vect ){
 	digitalWrite(POWER_LED_PORT,POWER_LED_PIN_NUM,!CheckBit(ACSR,ACO));

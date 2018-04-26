@@ -11,11 +11,9 @@ void wdt_init(void)
 {
 	asm("wdr");
 	WDTO_2S;
-	WDTCR = (1 << WDE) | (1 << WDCE);
-	sei();
+	WDTCR |= (1 << WDE) | (1 << WDCE);
 }
 void wdt_off(void)
 {
-	WDTCR |= (1 << WDCE) | (1 << WDE);
 	WDTCR = 0x00;
 }

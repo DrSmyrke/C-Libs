@@ -30,7 +30,7 @@ ISR(USART_TXC_vect ){	// Отправка данных
 	//lcd_str(str);
 }
 // Функция передачи данных по USART
-void uart_send(char data){
+void uart_send(uint8_t data){
 	while(!( UCSRA & (1 << UDRE)));   // Ожидаем когда очистится буфер передачи
 	UDR = data; // Помещаем данные в буфер, начинаем передачу
 }
@@ -42,7 +42,7 @@ void str_uart_send(char *string){
 	}
 }
 // Функция привема данных по USART
-unsigned char uart_receive(void) {
+uint8_t uart_receive(void) {
     while(!(UCSRA & (1<<RXC)) );
     return UDR;
 }
