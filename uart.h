@@ -11,7 +11,7 @@ void uart_init(){
     UCSRB=0x18;
 	UCSRC=0x86;
 	UBRRH=0x00;
-    UBRRL=0x33;
+    UBRRL=0x33;	// UBRRL=0x33; - 8MHz   UBRRL=0x19 - 4MHz;
 
 	UCSRB=( 1 << TXEN ) | ( 1 << RXEN ) | (1 << RXCIE );
 	UCSRC |= (1 << URSEL)| // Для доступа к регистру UCSRC выставляем бит URSEL
