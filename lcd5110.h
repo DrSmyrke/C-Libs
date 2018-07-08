@@ -47,10 +47,12 @@ void lcd_goto_xy(unsigned char x, unsigned char y);
 void lcd_goto_xy_exact(unsigned char x, unsigned char y);
 void lcd_chr(char chr);
 void lcd_str(char* str);
-void lcd_str2(char* str);
 void lcd_col(char chr);
 void lcd_pixelBack(void);
-//void printPictureOnLCD ( const unsigned char *data);
+
+void lcd5110_print_uchar_decimal( uint8_t val, const uint8_t BlankingFlag, const uint8_t right );
+void lcd5110_print_short_decimal( int16_t val, const uint8_t BlankingFlag, const uint8_t right );
+void lcd5110_print_decimal_base( uint32_t val, uint8_t limit, const uint8_t BlankingFlag, const uint8_t right, const uint8_t minus );
 
 #endif
 

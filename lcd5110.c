@@ -154,7 +154,7 @@ void lcd_init(void){
 	LCD_DDR |= LCD_RST_PIN | LCD_SCE_PIN | LCD_DC_PIN | LCD_DATA_PIN | LCD_CLK_PIN;
     
 	// Wait after VCC high for reset (max 30ms)
-    delay(150);
+    delay(1500);
     
     // Toggle display reset pin
     LCD_PORT &= ~LCD_RST_PIN;
@@ -257,7 +257,7 @@ void lcd_chrWD(char chr,unsigned char x,unsigned char y){
 }
 /* Displays string at current cursor location and increment cursor location */
 void lcd_str(char *str){
-    while(*str){lcd_chr(*str++);}
+    while(*str) lcd_chr(*str++);
 }
 
 // Set the base address of the lcd
@@ -309,15 +309,10 @@ void lcd_col(char chr){
 	lcdCacheIdx++;
 }
 
-/* It goes back the cursor on LCD for a single step 
-   This function added by Vassilis on 01 Jan 2012 */
 void lcd_pixelBack(void){
 	lcdCacheIdx--;
 }
 
-/* Prints on LCD a hex based picture.
-   A hex picture can be produced from the "LCDAssistant.exe" windows based software. 
-   This function added by Vassilis on 01 Jan 2012 */
 void printPictureOnLCD ( const unsigned char *data){
 	unsigned int i;
 
@@ -325,4 +320,52 @@ void printPictureOnLCD ( const unsigned char *data){
 	for(i=0;i<LCD_TOTAL_PIXEL_COLUMNS;i++)
 		lcd_col(pgm_read_byte(data++));
 	delay(10000);
+}
+
+void lcd5110_print_decimal_base( uint32_t val, uint8_t limit, const uint8_t BlankingFlag, const uint8_t right, const uint8_t minus )
+{
+	uint8_t tmpArray[limit];
+	uint8_t symCount = 0;
+	uint8_t i = limit;
+	tmpArray[limit] = '\0';
+	while( i ) tmpArray[--i] = ' ';
+	if( right ){
+		while( limit ){
+			if( val ){
+				tmpArray[--limit] = 0x30 + (val % 10);
+				val /= 10;
+				if( !val && minus ) tmpArray[--limit] = '-';
+			}else{
+				tmpArray[--limit] = ( !BlankingFlag ) ? 0x30 : ' ';
+			}
+		}
+	}else{
+		if( val == 0 ) tmpArray[symCount++] = 0x30;
+		while( val ){
+			if( symCount ){
+				i = limit;
+				while( --i ) tmpArray[i] = tmpArray[i-1];
+			}
+			tmpArray[0] = 0x30 + (val % 10);
+			val /= 10;
+			symCount++;
+		}
+		if( minus ){
+			i = limit;
+			while( --i ) tmpArray[i] = tmpArray[i-1];
+			tmpArray[0] = '-';
+		}
+	}
+
+	lcd_str( tmpArray );
+}
+void lcd5110_print_uchar_decimal( uint8_t val, const uint8_t BlankingFlag, const uint8_t right )
+{
+	lcd5110_print_decimal_base( val, 3, BlankingFlag, right, false );
+}
+void lcd5110_print_short_decimal( int16_t val, const uint8_t BlankingFlag, const uint8_t right )
+{
+	uint8_t minus = ( val < 0 ) ? true : false ;
+	if( minus ) val = 0 - val;
+	lcd5110_print_decimal_base( val, 6, BlankingFlag, right, minus );
 }
