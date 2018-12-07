@@ -41,6 +41,14 @@ void delay3(void)
 		for(i2 = 0; i2 < 65000; i2++) asm("nop");
 	}
 }
+void delay4(void)
+{
+	uint8_t i;
+	uint16_t i2;
+	for(i = 0; i < 4; i++){
+		for(i2 = 0; i2 < 65000; i2++) asm("nop");
+	}
+}
 
 uint8_t symToHex(uint8_t i)
 {
