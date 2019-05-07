@@ -42,5 +42,7 @@ void comparator_init()
 {
 	//pinModePD(6,INPUT);
 	pinModePD(7,INPUT);
-	ACSR |= ( 0 << ACD ) | ( 1 << ACBG ) | ( 1 << ACIE );
+	//Изменение с низкого состояния на высокое
+	//для срабатывания прерывания напряжение на PD7 должно быть ниже опорного 2.56
+	ACSR |= ( 0 << ACD ) | ( 1 << ACBG ) | ( 1 << ACIE ) | ( 1 << ACIS1 ) | ( 1 << ACIS0 );
 }

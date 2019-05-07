@@ -1,3 +1,4 @@
+#include <avr/interrupt.h>
 #include <avr/eeprom.h>
 #include <avr/io.h>
 // Чтение из EEPROM
