@@ -52,7 +52,8 @@ ISR(ADC_vect){
 //Результат преобразования хранится в ADCW = ADCH:ADCL
 	//unsigned int v = (ADCL|ADCH<<8);
 }
-void adc_init(){
+void adc_init()
+{
 	pinModePC(0,INPUT); 
 	ADMUX = 0b00000000;
 	ADMUX |= (1<<REFS0);
@@ -62,3 +63,15 @@ void adc_init(){
 }
 //Запускаем следующее преобразование
 //	ADCSRA |=(1<<ADSC);
+
+void adc_run()
+{
+	//Запускаем ADC
+	ADCSRA |=(1<<ADSC);
+}
+
+uint8_t adc_isLight()
+{
+	//Проверка на наличие света
+	return ( ADCH > 0x00 ) ? 0x01 : 0x00;
+}
