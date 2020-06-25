@@ -24,6 +24,12 @@ CS02 	CS01 	CS00
 ISR( TIMER0_OVF_vect ){
 	
 }
+
+void t0_reset()
+{
+	TCNT0 = 0x00;
+}
+
 void t0_init(){
 	//TCNT0=0x83; //выставляем начальное значение TCNT0
 	//TCCR0|=(1<<CS00);//предделитель/1
@@ -36,4 +42,5 @@ void t0_init(){
 	//SREG|=(1<<I);//глобальное разрешение прерывний
 	// Global enable interrupts
 	sei();
+	t0_reset();
 }
