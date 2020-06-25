@@ -14,19 +14,28 @@
 Для внешнего прерывания INT1, настройка производиться так же, только используются биты ISC11 ISC10.
 */
 
-uint8_t counter = 0;
+
+
+
+void int0_interrupt(void);
+
+
 //функция обработчик внешнего прерывания INT0
 ISR( INT0_vect )
 {
-  counter++;
+	int0_interrupt();
 }
 //настройка внешнего прерывния INT0
 void int0_init(void)
 {
 	pinModePD(2,INPUT);
 	//настраиваем на Задний фронт на INT0
-	MCUCR |=(1<<ISC01);
-	MCUCR &=~(1<<ISC00);
+	//MCUCR |=(1<<ISC01);
+	//MCUCR &=~(1<<ISC00);
 	//разрешаем внешнее прерывание INT0 
 	GICR |= (1<<INT0);
+	
+	//настраиваем на Задний фронт на INT0
+	setZero(MCUCR,ISC01);
+	setZero(MCUCR,ISC00);
 }
