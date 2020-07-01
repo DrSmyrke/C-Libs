@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm {uart.h, myDevicesIDs.h, Atmega8T0.h, main.h}
+rm {uart.h,myDevicesIDs.h,Atmega8T0.h,main.h}
 curl https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/uart.h > uart.h
 curl https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/myDevicesIDs.h > myDevicesIDs.h
 curl https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/Atmega8T0.h > Atmega8T0.h
