@@ -49,7 +49,7 @@ uint8_t uart_isReadAvailable()
 	return ( uart_rx_wIndx != uart_rx_rIndx ) ? 0x01 : 0x00;
 }
 
-void uart_readData(uint8_t* buff, uint8_t &len)
+void uart_readData(uint8_t* buff, uint8_t* len)
 {
 	len = 0;
 	
