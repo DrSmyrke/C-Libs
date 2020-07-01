@@ -1,0 +1,1 @@
+#define ONEWIRE_PROGRAMMER_ID			0x11
