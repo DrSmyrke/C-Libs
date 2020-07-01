@@ -54,7 +54,7 @@ uint8_t uart_readData(uint8_t* buff)
 	uint8_t ch = 0;
 	
 	while( uart_rx_wIndx != uart_rx_rIndx ){
-		buff[ch] = uart_rx_buff[ uart_rx_rIndx++ & UART_BUFF_MASK ];
+		buff[ch++] = uart_rx_buff[ uart_rx_rIndx++ & UART_BUFF_MASK ];
 	}
 	
 	buff[ch] = 0x00;
