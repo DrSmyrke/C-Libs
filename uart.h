@@ -49,7 +49,7 @@ uint8_t uart_isReadAvailable()
 	return ( uart_rx_wIndx != uart_rx_rIndx ) ? 0x01 : 0x00;
 }
 
-void uart_readData(uint8_t* buff, uint8_t* len)
+uint8_t uart_readData(uint8_t* buff)
 {
 	uint8_t ch = 0;
 	
@@ -59,7 +59,7 @@ void uart_readData(uint8_t* buff, uint8_t* len)
 	
 	buff[ch] = 0x00;
 	
-	*len = ch;
+	return ch;
 }
 
 // Прерывание по окончанию приема данных по USART
