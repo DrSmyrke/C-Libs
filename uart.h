@@ -3,6 +3,13 @@
 #include <string.h>
 #include <avr/interrupt.h>
 
+#define UART_BUFF_SIZE			32
+#define UART_BUFF_MASK			UART_BUFF_SIZE - 1
+
+uint8_t uart_rx_buff[UART_BUFF_SIZE];
+uint8_t uart_rx_rIndx = 0;
+uint8_t uart_rx_wIndx = 0;
+
 void uart_init(){
 	//Параметры соединения: 8 бит данные, 1 стоповый бит, нет контроля четности
 	//USART Приемник: Включен
@@ -36,10 +43,28 @@ uint8_t uart_receive(void) {
     while(!(UCSRA & (1<<RXC)) );
     return UDR;
 }
+
+uint8_t uart_isReadAvailable()
+{
+	return ( uart_rx_wIndx != uart_rx_rIndx ) ? 0x01 : 0x00;
+}
+
+void uart_readData(uint8_t* buff, uint8_t &len)
+{
+	len = 0;
+	
+	while( uart_rx_wIndx != uart_rx_rIndx ){
+		buff[len++] = uart_rx_buff[ uart_rx_rIndx++ & UART_BUFF_MASK ];
+	}
+	
+	buff[len] = 0x00;
+}
+
 // Прерывание по окончанию приема данных по USART
 ISR(USART_RXC_vect)
 {
-	uint8_t sym = uart_receive();
+	//uint8_t sym = uart_receive();
+	uart_rx_buff[ uart_rx_wIndx++ & UART_BUFF_MASK ] = uart_receive();
 }
 // Отправка данных
 ISR(USART_TXC_vect )
