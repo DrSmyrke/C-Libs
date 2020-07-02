@@ -26,19 +26,31 @@ void uart_init(){
 	UCSRC |= (1 << URSEL)| // Для доступа к регистру UCSRC выставляем бит URSEL
 	(1 << UCSZ1)|(1 << UCSZ0); // Размер посылки в кадре 8 бит
 }
+
 // Функция передачи данных по USART
-void uart_send(uint8_t data){
+void uart_send(uint8_t data)
+{
 	while(!( UCSRA & (1 << UDRE)));   // Ожидаем когда очистится буфер передачи
 	UDR = data; // Помещаем данные в буфер, начинаем передачу
 }
+
  // Функция передачи строки по USART
-void str_uart_send(char *string){
+void str_uart_send(char *string)
+{
 	while(*string != '\0'){
 		uart_send(*string);
 		string++;
 	}
 }
-// Функция привема данных по USART
+
+void uart_send_buff( uint8_t* buff, const uint8_t len )
+{
+	uint8_t i;
+	for( i = 0; i < len; i++ ){
+		uart_send( buff[i] );
+	}
+}
+
 uint8_t uart_receive(void) {
     while(!(UCSRA & (1<<RXC)) );
     return UDR;
