@@ -64,7 +64,7 @@ uint8_t myproto_packData( uint8_t* out_buff, const uint8_t cmd, uint8_t* data, c
 		crc += data[i];
 	}
 	out_buff[ch++]	= crc;
-	out_buff[ch++]	= MYPROTO_STOP_BYTE;
+	out_buff[ch]	= MYPROTO_STOP_BYTE;
 	
 	return ch;
 }
