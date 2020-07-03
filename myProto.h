@@ -46,7 +46,7 @@ struct MyProtoPkt{
 
 void myproto_processCommand(void);
 
-void myproto_send(const uint8_t byte)
+inline void myproto_send(const uint8_t byte)
 {
 	#ifdef MYPROTO_SEND_MY_USART_LIB
 		uart_send( byte );
