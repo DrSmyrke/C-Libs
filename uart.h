@@ -6,9 +6,9 @@
 #define UART_BUFF_SIZE			32
 #define UART_BUFF_MASK			UART_BUFF_SIZE - 1
 
-uint8_t uart_rx_buff[UART_BUFF_SIZE];
-uint8_t uart_rx_rIndx = 0;
-uint8_t uart_rx_wIndx = 0;
+volatile uint8_t uart_rx_buff[UART_BUFF_SIZE];
+volatile uint8_t uart_rx_rIndx = 0;
+volatile uint8_t uart_rx_wIndx = 0;
 
 void uart_init(){
 	//Параметры соединения: 8 бит данные, 1 стоповый бит, нет контроля четности
@@ -17,13 +17,13 @@ void uart_init(){
 	//USART Режим: Асинхронный
 	//USART Скорость обмена: 9600
     //UCSRA=0x00;
-    UCSRB=0x18;
+    UCSRB=0xd8;
 	UCSRC=0x86;
 	UBRRH=0x00;
     UBRRL=0x33;
 
-	UCSRB=( 1 << TXEN ) | ( 1 << RXEN ) | (1 << RXCIE );
-	UCSRC |= (1 << URSEL)| // Для доступа к регистру UCSRC выставляем бит URSEL
+	UCSRB = ( 1 << TXEN ) | ( 1 << RXEN ) | ( 1 << RXCIE ) | ( 1 << TXCIE ) | ( 0 << UDRIE );
+	UCSRC = (1 << URSEL)| // Для доступа к регистру UCSRC выставляем бит URSEL
 	(1 << UCSZ1)|(1 << UCSZ0); // Размер посылки в кадре 8 бит
 }
 
@@ -77,11 +77,12 @@ uint8_t uart_readData(uint8_t* buff)
 // Прерывание по окончанию приема данных по USART
 ISR(USART_RXC_vect)
 {
-	//uint8_t sym = uart_receive();
-	uart_rx_buff[ uart_rx_wIndx++ & UART_BUFF_MASK ] = uart_receive();
+	uint8_t sym = uart_receive();
+	uart_rx_buff[ uart_rx_wIndx++ & UART_BUFF_MASK ] = sym;
 }
-// Отправка данных
-ISR(USART_TXC_vect )
-{
 
+// Отправка данных
+ISR(USART_TXC_vect)
+{
+	
 }
