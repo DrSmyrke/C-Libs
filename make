@@ -1,9 +1,9 @@
 #!/bin/bash
 
-wget https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/uart.h
-wget https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/myDevicesTypes.h
-wget https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/myProto.h
-wget https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/main.h
+wget --no-cache https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/uart.h
+wget --no-cache https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/myDevicesTypes.h
+wget --no-cache https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/myProto.h
+wget --no-cache https://raw.githubusercontent.com/DrSmyrke/AVR-Libs/master/main.h
 
 BUILD_NUM=$(git rev-list HEAD --count)
 echo "#define BUILD_NUM $BUILD_NUM"> gitbuild.h
