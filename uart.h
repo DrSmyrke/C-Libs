@@ -28,7 +28,7 @@ void uart_init(){
 }
 
 // Функция передачи данных по USART
-void uart_send(uint8_t data)
+void uart_send( const uint8_t data )
 {
 	while(!( UCSRA & (1 << UDRE)));   // Ожидаем когда очистится буфер передачи
 	UDR = data; // Помещаем данные в буфер, начинаем передачу
@@ -72,6 +72,12 @@ uint8_t uart_readData(uint8_t* buff)
 	buff[ch] = 0x00;
 	
 	return ch;
+}
+
+void uart_sendHex( const uint8_t hexdig )
+{
+	uart_send( (hexdig >> 4) + (((hexdig >> 4) >= 10) ? ('A' - 10) : '0')) ;
+	uart_send( (hexdig & 0x0F) + (((hexdig & 0x0F) >= 10) ? ('A' - 10) : '0') );
 }
 
 // Прерывание по окончанию приема данных по USART
