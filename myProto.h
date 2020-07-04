@@ -26,6 +26,8 @@ enum{
   MYPROTO_CMD_SUCCESS			= 0x00,
   MYPROTO_CMD_GET_ID,
   MYPROTO_CMD_READ_DATA,
+  MYPROTO_CMD_SCAN,
+  MYPROTO_CMD_SEND,
 };
 
 struct MyProtoPkt{
@@ -190,9 +192,6 @@ void myproto_process()
 			myproto_sendData( recvPkt.cmd, recvPkt.data, recvPkt.len );
 			return;
 		}
-		
-		recvPkt.cmd		= MYPROTO_CMD_SUCCESS;
-		recvPkt.len		= 0;
 		
 		myproto_processCommand();
 		
