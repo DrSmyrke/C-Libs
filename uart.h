@@ -80,6 +80,12 @@ void uart_sendHex( const uint8_t hexdig )
 	uart_send( (hexdig & 0x0F) + (((hexdig & 0x0F) >= 10) ? ('A' - 10) : '0') );
 }
 
+void uart_newline()
+{
+	uart_send( '\r' );
+	uart_send( '\n' );
+}
+
 // Прерывание по окончанию приема данных по USART
 ISR(USART_RXC_vect)
 {
