@@ -17,13 +17,13 @@ volatile uint8_t myproto_type		= 0;
 volatile uint8_t myproto_id			= 0;
 
 enum{
-  MYPROTO_START_BYTE			= 0xA1,
-  MYPROTO_STOP_BYTE				= 0x1A,
+  MYPROTO_START_BYTE				= 0xA1,
+  MYPROTO_STOP_BYTE					= 0x1A,
 
-  MYPROTO_CMD_ERROR				= 0xFF,
-  MYPROTO_CMD_ERROR_CRC			= 0xFE,
+  MYPROTO_CMD_ERROR					= 0xFF,
+  MYPROTO_CMD_ERROR_CRC				= 0xFE,
   
-  MYPROTO_CMD_SUCCESS			= 0x00,
+  MYPROTO_CMD_SUCCESS				= 0x00,
   MYPROTO_CMD_GET_ID,
   MYPROTO_CMD_READ_DATA,
   MYPROTO_CMD_SCAN,
