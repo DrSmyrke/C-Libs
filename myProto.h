@@ -28,7 +28,7 @@ enum{
   MYPROTO_CMD_SCAN,
   MYPROTO_CMD_READ,
   MYPROTO_CMD_SEND,
-  MYPROTO_CMD_SET_ADDRESS,
+  MYPROTO_CMD_SET_ADDRESS,			// 0x05
 };
 
 struct MyProtoPkt{
@@ -140,7 +140,7 @@ void myproto_process()
 				if( recvPkt.readlen < recvPkt.len - 1 ){
 					recvPkt.data[recvPkt.readlen++] = byte;
 				}else{
-					recvPkt.data[recvPkt.readlen] = 0x00;
+					recvPkt.data[recvPkt.readlen + 1] = 0x00;
 					recvPkt.processF++;
 				}
 			break;
