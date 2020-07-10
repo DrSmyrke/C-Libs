@@ -120,6 +120,7 @@ void myproto_process()
 		
 		if( !recvPkt.processF ){
 			if( byte == MYPROTO_START_BYTE ){
+				recvPkt.readlen = 0;
 				recvPkt.processF++;
 			}
 			continue;
@@ -137,10 +138,9 @@ void myproto_process()
 				if( recvPkt.len == 0 ) recvPkt.processF++;
 			break;
 			case 3:
-				if( recvPkt.readlen < recvPkt.len - 1 ){
-					recvPkt.data[recvPkt.readlen++] = byte;
-				}else{
-					recvPkt.data[recvPkt.readlen + 1] = 0x00;
+				recvPkt.data[recvPkt.readlen++] = byte;
+				if( recvPkt.readlen >= recvPkt.len ){
+					recvPkt.data[recvPkt.readlen] = 0x00;
 					recvPkt.processF++;
 				}
 			break;
