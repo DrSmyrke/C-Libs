@@ -24,7 +24,7 @@ uint8_t pack_string( uint8_t* buff, const char* string )
 {
 	uint8_t len = 0;
 	while(*string != '\0'){
-		buff[len++] = *string;
+		buff[len++] = (uint8_t)*string;
 		string++;
 	}
 	return len;
