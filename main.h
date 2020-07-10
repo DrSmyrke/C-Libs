@@ -20,6 +20,16 @@
 #define ibi(reg,bit) reg ^= (1<<bit)
 #define CheckBit(reg,bit) (reg&(1<<bit))
 
+uint8_t pack_string( uint8_t* buff, const char* string )
+{
+	uint8_t len = 0;
+	while(*string != '\0'){
+		buff[len++] = *string;
+		string++;
+	}
+	return len;
+}
+
 void delay(uint16_t t){
 	uint16_t x;
 	for (x=t;x>0;x--) asm("nop"); 
