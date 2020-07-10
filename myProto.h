@@ -177,7 +177,8 @@ void myproto_process()
 
 		if( recvPkt.flags.crcError ){
 			recvPkt.cmd		= MYPROTO_CMD_ERROR_CRC;
-			recvPkt.len		= 0;
+			recvPkt.len		= 1;
+			recvPkt.data[0] = recvPkt.crc;
 			myproto_sendData( recvPkt.cmd, recvPkt.data, recvPkt.len );
 			return;
 		}
