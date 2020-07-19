@@ -1,5 +1,4 @@
 #include "myDevicesTypes.h"
-#include "gitbuild.h"
 
 #define MYPROTO_BUFF_SIZE			32
 #define MYPROTO_BUFF_MASK			MYPROTO_BUFF_SIZE - 1
