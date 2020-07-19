@@ -5,7 +5,6 @@
 #define MYPROTO_BUFF_MASK			MYPROTO_BUFF_SIZE - 1
 #define MYPROTO_VERSION				1
 
-#define MYPROTO_SEND_MY_USART_LIB
 #ifndef APP_VERSION
 	#define APP_VERSION				0
 #endif
