@@ -116,7 +116,7 @@ uint8_t myproto_packData( uint8_t* out_buff, const uint8_t cmd, uint8_t* data, c
 void myproto_process()
 {
 	while( myproto_rx_wIndx != myproto_rx_rIndx ){
-		uint8_t byte = myproto_rx_buff[ myproto_rx_rIndx++ & UART_BUFF_MASK ];
+		uint8_t byte = myproto_rx_buff[ myproto_rx_rIndx++ & MYPROTO_BUFF_MASK ];
 		
 		if( !recvPkt.processF ){
 			if( byte == MYPROTO_START_BYTE ){
