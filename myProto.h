@@ -46,7 +46,6 @@ struct MyProtoPkt{
 
 
 
-void myproto_processCommand(void);
 
 inline void myproto_send(const uint8_t byte)
 {
