@@ -194,7 +194,9 @@ void myproto_process()
 			return;
 		}
 		
-		myproto_processCommand();
+		if( !MYPROTO_PROCESS_FUNCTION ){
+			return;
+		}
 		
 		myproto_sendData( recvPkt.cmd, recvPkt.data, recvPkt.len );
 	}
