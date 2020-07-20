@@ -62,10 +62,10 @@ void myproto_init( const uint8_t type, const uint8_t id )
 	myproto_id				= id;
 }
 
-void myproto_setRXData( uint8_t* buff, const uint8_t *len )
+void myproto_setRXData( uint8_t* buff, const uint8_t len )
 {
 	uint8_t i;
-	for( i = 0; i < *len; i++ ){
+	for( i = 0; i < len; i++ ){
 		myproto_rx_buff[ myproto_rx_wIndx++ & MYPROTO_BUFF_MASK ] = buff[i];
 	}
 }
