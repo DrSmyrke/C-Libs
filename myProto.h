@@ -195,9 +195,9 @@ void myproto_process( uint8_t customProcess = 0 )
 			return;
 		}
 		
-		if( !MYPROTO_PROCESS_FUNCTION ){
-			return;
-		}
+	#ifdef MYPROTO_PROCESS_FUNCTION
+		if( !MYPROTO_PROCESS_FUNCTION ) return;
+	#endif
 		
 		myproto_sendData( recvPkt.cmd, recvPkt.data, recvPkt.len );
 	}
