@@ -111,7 +111,7 @@ uint8_t myproto_packData( uint8_t* out_buff, const uint8_t cmd, uint8_t* data, c
 	return ch;
 }
 
-void myproto_process()
+void myproto_process( uint8_t customProcess = 0 )
 {
 	while( myproto_rx_wIndx != myproto_rx_rIndx ){
 		uint8_t byte = myproto_rx_buff[ myproto_rx_rIndx++ & MYPROTO_BUFF_MASK ];
@@ -173,6 +173,8 @@ void myproto_process()
 	if( recvPkt.flags.valid ){
 		recvPkt.flags.valid = 0;
 
+		if( !customProcess ) return;
+		
 		if( recvPkt.flags.crcError ){
 			recvPkt.cmd		= MYPROTO_CMD_ERROR_CRC;
 			recvPkt.len		= 1;
