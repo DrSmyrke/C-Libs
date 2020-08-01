@@ -119,62 +119,62 @@ void myproto_parsPkt( MyProtoPkt* pkt, uint8_t* buff, const uint8_t buffSize )
 	while( i < buffSize ){
 		byte = buff[ i++ ];
 		
-		if( !pkt.processF ){
+		if( !pkt->processF ){
 			if( byte == MYPROTO_START_BYTE ){
-				pkt.readlen = 0;
-				pkt.flags.valid = 0;
-				pkt.processF++;
+				pkt->readlen = 0;
+				pkt->flags.valid = 0;
+				pkt->processF++;
 			}
 			continue;
 		}
 		
-		switch( pkt.processF ){
+		switch( pkt->processF ){
 			case 1:
-				pkt.cmd = byte;
-				pkt.processF++;
+				pkt->cmd = byte;
+				pkt->processF++;
 			break;
 			case 2:
-				pkt.len = byte;
-				pkt.readlen = 0;
-				pkt.processF++;
-				if( pkt.len == 0 ) pkt.processF++;
+				pkt->len = byte;
+				pkt->readlen = 0;
+				pkt->processF++;
+				if( pkt->len == 0 ) pkt->processF++;
 			break;
 			case 3:
-				pkt.data[pkt.readlen++] = byte;
-				if( pkt.readlen >= pkt.len ){
-					pkt.data[pkt.readlen] = 0x00;
-					pkt.processF++;
+				pkt->data[pkt->readlen++] = byte;
+				if( pkt->readlen >= pkt->len ){
+					pkt->data[pkt->readlen] = 0x00;
+					pkt->processF++;
 				}
 			break;
 			case 4:
-				pkt.crc = byte;
-				pkt.processF++;
+				pkt->crc = byte;
+				pkt->processF++;
 				continue;
 			break;
 		}
 		
-		if( pkt.processF == 5 ){
-			pkt.processF = 0;
+		if( pkt->processF == 5 ){
+			pkt->processF = 0;
 			
 			if( byte == MYPROTO_STOP_BYTE ){
 
 				uint8_t i;
 				uint8_t crc = 0;
-				crc += pkt.cmd;
-				crc += pkt.len;
-				for( i = 0; i < pkt.len; i++ ){
-					crc += pkt.data[i];
+				crc += pkt->cmd;
+				crc += pkt->len;
+				for( i = 0; i < pkt->len; i++ ){
+					crc += pkt->data[i];
 				}
-				pkt.flags.crcError = ( crc == pkt.crc ) ? 0 : 1;
-				pkt.flags.valid = 1;
+				pkt->flags.crcError = ( crc == pkt->crc ) ? 0 : 1;
+				pkt->flags.valid = 1;
 				break;
 			}
 			
-			pkt.flags.valid = 0;
+			pkt->flags.valid = 0;
 		}
 	}
 	
-	pkt.readlen = i;
+	pkt->readlen = i;
 }
 
 void myproto_process()
