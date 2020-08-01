@@ -171,9 +171,10 @@ void myproto_process( uint8_t customProcess = 0 )
 	}
 	
 	if( recvPkt.flags.valid ){
-		recvPkt.flags.valid = 0;
-
+		
 		if( customProcess ) return;
+		
+		recvPkt.flags.valid = 0;
 		
 		if( recvPkt.flags.crcError ){
 			recvPkt.cmd		= MYPROTO_CMD_ERROR_CRC;
