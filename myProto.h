@@ -1,4 +1,4 @@
-#include "myDevicesTypes.h"
+#include "myProtoDefines.h"
 
 #define MYPROTO_BUFF_SIZE			32
 #define MYPROTO_BUFF_MASK			MYPROTO_BUFF_SIZE - 1
@@ -13,22 +13,6 @@ volatile uint8_t myproto_rx_rIndx	= 0;
 volatile uint8_t myproto_rx_wIndx	= 0;
 volatile uint8_t myproto_type		= 0;
 volatile uint8_t myproto_id			= 0;
-
-enum{
-  MYPROTO_START_BYTE				= 0xA1,
-  MYPROTO_STOP_BYTE					= 0x1A,
-
-  MYPROTO_CMD_ERROR					= 0xFF,
-  MYPROTO_CMD_ERROR_CRC				= 0xFE,
-  
-  MYPROTO_CMD_SUCCESS				= 0x00,
-  MYPROTO_CMD_GET_ID,
-  MYPROTO_CMD_SCAN,
-  MYPROTO_CMD_READ,
-  MYPROTO_CMD_SEND,
-  MYPROTO_CMD_SEND_READ,			// 0x05
-  MYPROTO_CMD_SET_ADDRESS,			
-};
 
 struct MyProtoPkt{
 	uint8_t cmd;
