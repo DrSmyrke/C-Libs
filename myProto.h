@@ -14,7 +14,7 @@ volatile uint8_t myproto_rx_wIndx	= 0;
 volatile uint8_t myproto_type		= 0;
 volatile uint8_t myproto_id			= 0;
 
-struct MyProtoPkt{
+typedef struct{
 	uint8_t cmd;
 	uint8_t len;
 	uint8_t data[MYPROTO_BUFF_SIZE];
@@ -25,8 +25,9 @@ struct MyProtoPkt{
 		unsigned valid			: 1;
 		unsigned crcError		: 1;
 	} flags;
-} recvPkt;
+} MyProtoPkt;
 
+MyProtoPkt recvPkt;
 
 
 
