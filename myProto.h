@@ -247,7 +247,7 @@ void myproto_process()
 		}
 		
 	#ifdef MYPROTO_PROCESS_FUNCTION
-		if( !MYPROTO_PROCESS_FUNCTION ) return;
+		if( !MYPROTO_PROCESS_FUNCTION() ) return;
 	#endif
 		
 		myproto_sendData( recvPkt.cmd, recvPkt.data, recvPkt.len );
