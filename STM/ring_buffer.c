@@ -31,6 +31,7 @@ uint8_t RING_BUFFER_read(RingBuffer *buffer)
 	}else{
 		uint8_t byte = buffer->pBuffer[ buffer->rIndx ];
 		buffer->rIndx = (uint16_t)(buffer->rIndx + 1) % buffer->size;
+		return byte;
 	}
 }
 
