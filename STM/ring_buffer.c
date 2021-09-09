@@ -9,10 +9,8 @@
 
 
 /* Functions -----------------------------------------------------------------*/
-void RING_BUFFER_init(RingBuffer *buffer, const uint16_t size)
+void RING_BUFFER_init(RingBuffer *buffer, const uint8_t *buff, const uint16_t size)
 {
-	uint8_t buff[ size ];
-	
 	buffer->pBuffer		= buff;
 	buffer->size		= size;
 	

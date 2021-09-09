@@ -28,7 +28,7 @@ typedef struct {
 
 
 /* Functions -----------------------------------------------------------------*/
-void RING_BUFFER_init(RingBuffer *buffer, const uint16_t size);
+void RING_BUFFER_init(RingBuffer *buffer, const uint8_t *buff, const uint16_t size);
 uint16_t RING_BUFFER_available(const RingBuffer *buffer);
 uint8_t RING_BUFFER_read(RingBuffer *buffer);
 void RING_BUFFER_clear(RingBuffer *buffer);
