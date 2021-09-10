@@ -45,6 +45,6 @@ void RING_BUFFER_clear(RingBuffer *buffer)
 
 void RING_BUFFER_write(RingBuffer *buffer, const uint8_t value)
 {
-	buffer->pBuffer[ buffer->wIndx ];
+	buffer->pBuffer[ buffer->wIndx ] = value;
 	buffer->wIndx = (uint16_t)(buffer->wIndx + 1) % buffer->size;
 }
