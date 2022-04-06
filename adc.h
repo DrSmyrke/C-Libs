@@ -51,6 +51,7 @@ ISR(ADC_vect){
 // 	vcc = 1.1 * 255 / adc_data;
 //Результат преобразования хранится в ADCW = ADCH:ADCL
 	//unsigned int v = (ADCL|ADCH<<8);
+	vcc3 = ( ADCH << 8 ) | ( ADCL );
 }
 void adc_init()
 {
@@ -67,7 +68,7 @@ void adc_run()
 	//Запускаем ADC
 	ADCSRA |=(1<<ADSC);
 	//Ждем окончания преобразования
-	while((ADCSRA & (1<<ADSC)));
+	if( !CheckBit( ADCSRA, ADIE ) ) while((ADCSRA & (1<<ADSC)));
 }
 
 uint8_t adc_isLight()
