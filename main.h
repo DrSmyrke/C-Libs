@@ -3,6 +3,7 @@
 
 
 #include <stdint.h>
+#include <support_defines.h>
 
 
 uint8_t pack_string( uint8_t* buff, const char* string )
