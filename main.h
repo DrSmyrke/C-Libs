@@ -1,3 +1,9 @@
+#ifndef _MAIN_H_
+#define _MAIN_H_
+
+
+#include <stdint.h>
+
 
 uint8_t pack_string( uint8_t* buff, const char* string )
 {
@@ -149,3 +155,5 @@ void strToInt( uint8_t *str, const uint8_t len, int32_t val, uint8_t valDrob )
 	if( minusF ) val = 0 - val;
 }
 */
+
+#endif //_MAIN_H_
