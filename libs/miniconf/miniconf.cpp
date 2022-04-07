@@ -1,5 +1,7 @@
 #include "miniconf.h"
 
+#include <stdio.h>
+
 FILE* file;
 char buff[16];
 
