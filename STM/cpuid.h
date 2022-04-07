@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-
+#include <stdint.h>
 
 
 extern volatile uint32_t CPU_UID;
