@@ -2,6 +2,7 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
+#include <support_defines.h>
 #include "lcd5110.h"
 
 /* delay macro function */
