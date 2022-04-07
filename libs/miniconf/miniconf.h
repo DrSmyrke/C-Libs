@@ -1,9 +1,7 @@
 #ifndef MINICONF_H
 #define MINICONF_H
 
-#ifdef __cplusplus
-#include <iostream>
-#endif
+#include <stdint.h>
 
 void miniconf_parsFile( const char *filename );
 void miniconf_setParam( const char *param, const char *value );
