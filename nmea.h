@@ -1,3 +1,8 @@
+#ifndef _NMEA_H_
+#define _NMEA_H_
+
+#include <stdint.h>
+
 #define SPEED_VALID 'A'
 #define SPEED_NO_VALID 'V'
 
@@ -145,3 +150,5 @@ void nmea_dataCheck()
 	//gps.speedDrob = strToDrob( gpsRaw.speed );
 	if( gps.speedDrob > 10 ) gps.speedDrob = gps.speedDrob % 10;
 }
+
+#endif // _NMEA_H_
