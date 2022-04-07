@@ -1,5 +1,7 @@
 #include "nmea.h"
 
+#ifndef _UNCOMPLETED_H
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -24,7 +26,7 @@ switch (nmea_sentence_id(buff, false)) {
 	case NMEA_SENTENCE_RMC:
 		if (nmea_parse_rmc(&rmc_frame, buff)) {
 			std::string str = std::to_string(rmc_frame.time.hours) + ":" + std::to_string(rmc_frame.time.minutes) + ":" + std::to_string(rmc_frame.time.seconds);
-			//Установка времени пришедшего с источника
+			//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			SYSTEMTIME st;
 			GetSystemTime(&st);
 			st.wHour = rmc_frame.time.hours;
@@ -69,18 +71,18 @@ bool nmea_check(const char *sentence, bool strict)
 {
     uint8_t checksum = 0x00;
 
-    // Если данные больше заданной длинны
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     if (strlen(sentence) > NMEA_MAX_LENGTH + 3)
         return false;
 
-    // Если данные не начинаются с "$".
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ "$".
     if (*sentence++ != '$')
         return false;
 
     while (*sentence && *sentence != '*' && isprint((unsigned char) *sentence))
         checksum ^= *sentence++;
 
-    // Если присутствует контрольная сумма
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     if (*sentence == '*') {
         sentence++;
         int upper = hex2int(*sentence++);
@@ -251,7 +253,7 @@ bool nmea_scan(const char *sentence, const char *format, ...)
             } break;
 
             case 't': { // NMEA talker+sentence identifier (char *).
-                // Это поле обязательно
+                // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 if (!field)
                     goto parse_error;
 
@@ -272,7 +274,7 @@ bool nmea_scan(const char *sentence, const char *format, ...)
                 int d = -1, m = -1, y = -1;
 
                 if (field && nmea_isfield(*field)) {
-                    // Всегда 6 цифр.
+                    // пїЅпїЅпїЅпїЅпїЅпїЅ 6 пїЅпїЅпїЅпїЅ.
                     for (int f=0; f<6; f++)
                         if (!isdigit((unsigned char) field[f]))
                             goto parse_error;
@@ -296,7 +298,7 @@ bool nmea_scan(const char *sentence, const char *format, ...)
                 int h = -1, i = -1, s = -1, u = -1;
 
                 if (field && nmea_isfield(*field)) {
-                    // Минимальное требование: Целое число
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
                     for (int f=0; f<6; f++)
                         if (!isdigit((unsigned char) field[f]))
                             goto parse_error;
@@ -309,7 +311,7 @@ bool nmea_scan(const char *sentence, const char *format, ...)
                     s = strtol(sArr, NULL, 10);
                     field += 6;
 
-                    // Дробное время сохраняется как микросекунды
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     if (*field++ == '.') {
                         uint32_t value = 0;
                         uint32_t scale = 1000000LU;
@@ -329,7 +331,7 @@ bool nmea_scan(const char *sentence, const char *format, ...)
                 time_->microseconds = u;
             } break;
 
-            case '_': { // игнорирование поля.
+            case '_': { // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
             } break;
 
             default: {
@@ -586,7 +588,7 @@ bool nmea_parse_vtg(struct nmea_sentence_vtg *frame, const char *sentence)
         return false;
     if (strcmp(type+2, "VTG"))
         return false;
-    // проверка символов
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     if (c_true != 'T' ||
         c_magnetic != 'M' ||
         c_knots != 'N' ||
@@ -614,7 +616,7 @@ bool nmea_parse_zda(struct nmea_sentence_zda *frame, const char *sentence)
   if (strcmp(type+2, "ZDA"))
       return false;
 
-  // проверка смещения
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   if (abs(frame->hour_offset) > 13 ||
       frame->minute_offset > 59 ||
       frame->minute_offset < 0)
@@ -652,3 +654,5 @@ int nmea_gettime(struct timespec *ts, const struct nmea_date *date, const struct
         return -1;
     }
 }
+
+#endif /* _UNCOMPLETED_H */
