@@ -1,3 +1,5 @@
+#ifndef _UNCOMPLETED_H
+
 #ifndef NMEA_H
 #define NMEA_H
 
@@ -248,3 +250,4 @@ static inline float nmea_tocoord(struct nmea_float *f)
 #endif
 
 #endif /* NMEA_H */
+#endif /* _UNCOMPLETED_H */
