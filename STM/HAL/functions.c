@@ -1,5 +1,7 @@
 #include "functions.h"
 
+#ifdef __ARMCC_VERSION
+
 void UART_Printf(UART_HandleTypeDef * huart, const char* fmt, ...)
 {
     char buff[256];
@@ -9,3 +11,5 @@ void UART_Printf(UART_HandleTypeDef * huart, const char* fmt, ...)
     HAL_UART_Transmit(huart, (uint8_t*)buff, strlen(buff), HAL_MAX_DELAY);
     va_end(args);
 }
+
+#endif //__ARMCC_VERSION
