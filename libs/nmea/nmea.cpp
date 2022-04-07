@@ -1,6 +1,6 @@
 #include "nmea.h"
 
-#ifndef _UNCOMPLETED_H
+#ifdef _UNCOMPLETED_H
 
 #include <stdlib.h>
 #include <string.h>
