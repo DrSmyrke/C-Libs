@@ -1,4 +1,4 @@
-#ifndef _UNCOMPLETED_H
+#ifdef _UNCOMPLETED_H
 
 #ifndef NMEA_H
 #define NMEA_H
