@@ -2,7 +2,7 @@
 //#define F_CPU 4000000UL
 //unsigned char Sec,Min,Hour,Day,Month,Year,DayOfWeek,AMPM,H12_24;
 //unsigned char menu,mode,buff[16],alarmNum,alarmNumB,ch,bgl;
-#include "main.h"
+// #include "main.h"
 //***************************************************************************
 // Установки
 

@@ -1,3 +1,4 @@
+#ifdef _UNCOMPLETED_H
 #include "miniconf.h"
 
 #include <stdio.h>
@@ -122,3 +123,6 @@ void miniconf_reverseArray(char *array)
 		array[i] = temp;
 	}
 }
+
+
+#endif /* _UNCOMPLETED_H */

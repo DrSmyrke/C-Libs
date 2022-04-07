@@ -1,3 +1,5 @@
+#ifdef _UNCOMPLETED_H
+
 #include "miniconf.h"
 
 int main()
@@ -13,3 +15,6 @@ int main()
 
     return 0;
 }
+
+
+#endif /* _UNCOMPLETED_H */

@@ -1,3 +1,6 @@
+#ifdef _UNCOMPLETED_H
+
+
 #ifndef MINICONF_H
 #define MINICONF_H
 
@@ -14,3 +17,6 @@ void miniconf_reverseArray(char *array );
 char* miniconf_itoa( uint32_t value );
 
 #endif // MINICONF_H
+
+
+#endif /* _UNCOMPLETED_H */
