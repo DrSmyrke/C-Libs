@@ -1,5 +1,5 @@
 #include "sleep.h"
-#include "main.h"
+#include <support_defines.h>
 #include <avr/io.h>
 
 //-------------------------------------------------------------------------------------------
