@@ -43,6 +43,13 @@ namespace esp {
 	 */
 	uint8_t isClient();
 	/**
+	 * read ssid and key for STA from spi fs
+	 * @param {char*} ssid
+	 * @param {char*} key
+	 * @return {uint8_t} result ( 1 - success, 0 - error )
+	 */
+	uint8_t readSTAconfig(char *ssid, char *key);
+	/**
 	 * save ssid and key for STA mode from spi fs
 	 * @param {char*} ssid
 	 * @param {char*} key
