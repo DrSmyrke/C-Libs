@@ -25,14 +25,14 @@ namespace esp {
 							ssid[ ssidLen ] = '\0';
 							continue;
 						}
-						if( ssidLen >= ESP_AP_SSID_MAX_LEN ) break;
+						if( ssidLen >= ESP_CONFIG_SSID_MAX_LEN ) break;
 						ssid[ ssidLen++ ] = sym;
 					}else{
 						if( sym == '\n' ){
 							key[ keyLen ] = '\0';
 							break;
 						}
-						if( keyLen >= ESP_AP_KEY_MAX_LEN ) break;
+						if( keyLen >= ESP_CONFIG_KEY_MAX_LEN ) break;
 						key[ keyLen++ ] = sym;
 					}
 				}
@@ -77,7 +77,29 @@ namespace esp {
 	}
 
 	//-------------------------------------------------------------------------------
+	uint8_t isClient()
+	{
+		return ( LittleFS.exists( ESP_STA_CONFIG_FILE ) ) ? 1 : 0;
+	}
+
 	//-------------------------------------------------------------------------------
+	uint8_t saveSTAconfig(const char *ssid, const char *key)
+	{
+		uint8_t result = 0;
+
+		File f = LittleFS.open( ESP_STA_CONFIG_FILE, "w");
+		if( f ){
+			f.write( ssid );
+			f.write( '\n' );
+			f.write( key );
+			f.write( '\n' );
+			f.close();
+			result = 1;
+		}
+
+		return result;
+	}
+
 	//-------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------
